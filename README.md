@@ -9,3 +9,5 @@ Build with rust on any platform (requires mingw-w64):
 cargo update
 cargo build --target x86_64-pc-windows-gnu --release
 ```
+
+Note if you wish to change the icon, change `the assets/app.ico`. You will need to recompile on a windows machine in order for the icon to compile.
