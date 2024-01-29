@@ -14,7 +14,7 @@ fn my_service_main(_arguments: Vec<OsString>) {
         .output()
         .expect("failed to execute process");
 
-    let mut file = File::create("C:\\\\PENTEST_WHOAMI.txt")
+    let mut file = File::create("C:\\\\PENTEST_SERVICE.txt")
         .expect("unable to create file");
 
     file.write_all(b"PENTEST SERVICE RAN AS: ")
@@ -31,7 +31,7 @@ fn stop_service() -> windows_service::Result<()> {
     let manager = ServiceManager::local_computer(None::<&str>, manager_access)?;
 
     let service_access = ServiceAccess::STOP | ServiceAccess::QUERY_STATUS;
-    let service = manager.open_service("PENTEST", service_access)?;
+    let service = manager.open_service("PENTESTSERVICE", service_access)?;
 
     match service.stop() {
         Ok(_) => Ok(()),
@@ -44,7 +44,7 @@ fn print_service_status() -> windows_service::Result<()> {
     let manager = ServiceManager::local_computer(None::<&str>, manager_access)?;
 
     let service_access = ServiceAccess::QUERY_CONFIG | ServiceAccess::QUERY_STATUS;
-    let service = manager.open_service("PENTEST", service_access)?;
+    let service = manager.open_service("PENTESTSERVICE", service_access)?;
     let service_status = service.query_status()?;
     let service_config = service.query_config()?;
 
@@ -59,9 +59,10 @@ fn main() -> windows_service::Result<()> {
 
     if args.len() == 1 {
         // No arguments were supplied
-        service_dispatcher::start("PENTEST", ffi_service_main)?;
+        service_dispatcher::start("PENTESTSERVICE", ffi_service_main)?;
     } else {
         // Print current service status
+        service_dispatcher::start("PENTESTSERVICE", ffi_service_main)?;
         let _ = print_service_status();
     }
 
