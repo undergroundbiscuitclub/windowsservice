@@ -47,30 +47,8 @@ fn stop_service() -> windows_service::Result<()> {
 
 // Main function
 fn main() -> windows_service::Result<()> {
-    let args: Vec<OsString> = std::env::args_os().collect();
 
     service_dispatcher::start("PENTESTSERVICE", ffi_service_main)?;
-
-    // Print current service status if arguments were supplied
-    if args.len() > 1 {
-        let _ = print_service_status();
-    }
-
-    Ok(())
-}
-
-// Print service status
-fn print_service_status() -> windows_service::Result<()> {
-    let manager = service_manager(ServiceManagerAccess::CONNECT)?;
-    let service = manager.open_service(
-        "PENTESTSERVICE", 
-        ServiceAccess::QUERY_CONFIG | ServiceAccess::QUERY_STATUS
-    )?;
-    let service_status = service.query_status()?;
-    let service_config = service.query_config()?;
-
-    println!("Service status: {:?}", service_status);
-    println!("Service config: {:?}", service_config);
 
     Ok(())
 }
